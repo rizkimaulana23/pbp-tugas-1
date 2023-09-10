@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-# pbp-tugas-1
-LETS GET IT BOYS
-=======
 # Pengerjaan Checklist
 
 ### Membuat sebuah proyek Django baru
