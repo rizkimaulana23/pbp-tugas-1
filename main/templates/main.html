@@ -1,0 +1,8 @@
+<h1>Oculus Tracker</h1>
+{% for oculi in oculus%}
+<h2>Name : {{oculi.name}}</h2>
+<p>Region : {{oculi.region}}</p>
+<p>Amount collected : {{oculi.amount_collected}} / {{oculi.amount}}</p>
+<p>Total amount : {{oculi.amount}}</p>
+<p>Description : {{oculi.description}}</p>
+{% endfor %}
