@@ -1,4 +1,4 @@
-# Pengerjaan Checklist
+# Tugas 2
 
 ### Membuat sebuah proyek Django baru
 Pada direktori yang telah saya tentukan, Saya membuat proyek Django baru yang bernama "oculi_archive". Saya membuat proyek tersebut dengan membuka terminal di dalam direktori tersebut dan menjalankan kode :  
@@ -125,4 +125,193 @@ Adapun perbedaan dari ketiganya adalah sebagai berikut :
 - MVC memisahkan tugas menjadi Model, View, dan Controller dengan Controller sebagai pengendali interaksi.
 - MVT mirip dengan MVC, tetapi menggunakan Template sebagai bagian terpisah yang mengontrol tampilan.
 - MVVM memisahkan tugas menjadi Model, View, dan ViewModel dengan ViewModel bertindak sebagai perantara yang mengelola tampilan dan interaksi pengguna.
->>>>>>> 15e9663 (Push sekali ini)
+
+# Tugas 3
+## Apa perbedaan antara form POST dan form GET dalam Django?
+GET dan POST adalah method HTTP yang digunakan ketika berurusan dengan forms.  
+Pengisian form Django diberikan dengan menggunakan metode POST, yang mana browser akan mengumpulkan data form, meng-encode data tersebut untuk transmisi, dan akan menerima respons tersebut.  
+GET mengumpulkan data ke dalam bentuk string, dan menggunakan string tersebut untuk membuat sebuah URL. URL tersebut berisikan alamat data tersebut harus dikirim, termasuk keys dan values dari data tersebut.  
+
+
+## Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data?
+- XML adalah bahasa markup yang menggunakan tag untuk mendefinisikan struktur dan makna data. XML dapat digunakan untuk menyimpan data yang kompleks dan beranotasi, seperti dokumen, grafik, atau metadata. XML memisahkan data dari HTML dan menyederhanakan proses perubahan platform.  
+- JSON adalah format pertukaran data yang terbuka dan ringan yang menggunakan pasangan kunci-nilai untuk merepresentasikan data. JSON dapat digunakan untuk menyimpan data yang sederhana dan terstruktur, seperti objek, array, atau nilai primitif. JSON juga lebih mudah dibaca dan ditulis oleh manusia dan mesin daripada XML.  
+- HTML adalah bahasa markup yang digunakan untuk membuat halaman web dan aplikasi web. HTML menggunakan tag untuk menentukan tata letak dan penampilan data. HTML dirancang untuk menampilkan data, bukan untuk mengangkut data. HTML tidak dapat menyimpan data yang kompleks atau terstruktur seperti XML atau JSON.   
+
+
+## Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+- JSON memiliki struktur data yang sederhana dan mudah dipahami oleh manusia dan mesin. JSON juga mendukung semua browser dan sebagian besar teknologi backend.  
+- JSON memiliki file yang lebih ringan daripada XML, format pertukaran data lain yang sering digunakan. Hal ini membuat JSON lebih cepat dan efisien dalam mengirim dan menerima data melalui jaringan.  
+- JSON dapat menyimpan data yang ringan dan terstruktur, seperti objek, array, atau nilai primitif. Hal ini cocok untuk aplikasi web modern yang membutuhkan data yang dinamis dan interaktif.  
+- JSON dapat digunakan dengan berbagai bahasa pemrograman, seperti PHP, Python, Ruby, C++, Perl, dan tentu saja JavaScript. Hal ini memberikan fleksibilitas dan kompatibilitas bagi developer untuk memilih bahasa yang sesuai dengan kebutuhan mereka.  
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+### Membuat `base.html` sebagai template untuk template-template html lainnya
+~~~
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        {% block meta %}
+        {% endblock meta %}
+    </head>
+
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
+~~~
+### Mengedit `TEMPLATES` yang ada pads `settings.py` supaya `base.html` terdeteksi sebagai berkas template
+~~~
+...
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+...
+~~~
+### Mengubah `main.html` supaya meng-extend dari `base.html`
+~~~
+{% extends 'base.html' %}
+...
+~~~
+### Membuat `forms.py` untuk membuat struktur form dan meng-import form tersebut pada `views.py`
+ModelForm di-import untuk mendapatkan properti dari form yang ada pada django untuk form yang ingin kita buat. Setelah itu kita akan membuat class ProductForm yang telah menginherit ModelForm dan memberikan properti `model` dengan model yang telah kita buat dan memberikan properti `fields` dengan properti dari model tersebut.
+~~~
+from django.forms import ModelForm
+from main.models import Oculi
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = Oculi
+        fields = ["name", "region", "amount_collected", "amount", "description"]
+~~~
+### Membuat fungsi baru untuk menambahkan data produk secara otomatis
+Setelah membuat bentuk dari form, kita membuat fungsi baru untuk menambahkan data produk secara otomatis setelah form sudah benar dan di-submit oleh user.
+~~~
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+~~~
+### Mengubah fungsi `show_main` pada `views.py` supaya data dapat diakses pada `main.html`
+Memberikan variable `oculus` supaya model Oculi dapat diakses pada `main.html`.
+~~~
+def show_main(request):
+
+    # Iterating through the data
+    
+    oculi = Oculi.objects.all()
+    context = {
+        'name' : "Rizki Maulana",
+        'class' : "PBP-C",
+        'oculus' : oculi,
+    }
+~~~
+### Menambahkan `create_product` ke `urls.py` dan membuat path yang sesuai
+~~~
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+~~~
+### Membuat `create_product.html`
+~~~
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Product"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+~~~
+Kode HTML tersebut akan mendefinisikan template untuk menambahkan object baru. Kode tersebut meng-extend dari base template, membuat struktur, menambahkan proteksi CSRF, dan me-render field form pada tabel HTML. Ketika user men-submit form tersebut, data akan dikirimkan ke server.
+### Membuat fungsi `show_json` dan `show_xml` pada `views.py` dan menambahkannya pada `urls.py`
+- Fungsi `show_json`: 
+    ~~~
+    def show_json(request):
+        data = Oculi.objects.all()
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ~~~
+- Fungsi `show_xml` : 
+    ~~~
+    def show_xml(request):
+        data = Oculi.objects.all()
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    ~~~
+- Meng-import kedua fungsi tersebut pada `urls.py`
+    ~~~
+    from main.views import show_main, create_product, show_xml, show_json
+    ~~~
+- Membuat url untuk kedua fungsi tersebut agar dapat diakses sesuai url-nya masing-masing :
+    ~~~
+    ...
+    path('xml/', show_xml, name='show_xml'), 
+    path('json/', show_json, name='show_json'), 
+    ...
+    ~~~
+### Membuat fungsi  `show_xml_by_id` dan `show_json_by_id` pada `views.py` dan menambahkannya pada `urls.py`
+- Fungsi `show_xml_by_id` :
+    ~~~
+    def show_xml_by_id(request, id):
+        data = Oculi.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+    ~~~
+- Fungsi `show_json_by_id` :
+    ~~~
+    def show_json_by_id(request, id):
+        data = Oculi.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+    ~~~
+- Meng-import kedua fungsi tersebut pada `urls.py` :
+    ~~~
+    from main.views import show_main, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id 
+    ~~~
+- Membuat url untuk kedua fungsi tersebut agar dapat diakses sesuai url-nya masing-masing : 
+    ~~~
+    ...
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
+    ...
+    ~~~
+
+## Mengakses kelima URL tersebut menggunakan Postman
+- HTML  
+    ![](images_readme/screenshot_html.png)
+- JSON  
+    ![](images_readme/screenshot_json.png)
+- XML
+    ![](images_readme/screenshot_xml.png)
+- JSON by ID  
+    ![](images_readme/screenshot_json_by_id.png)
+- XML by ID  
+    ![](images_readme/screenshot_xml_by_id.png)

@@ -1,8 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1>Oculus Tracker</h1>
-{% for oculi in oculus%}
-<h2>Name : {{oculi.name}}</h2>
-<p>Region : {{oculi.region}}</p>
-<p>Amount collected : {{oculi.amount_collected}} / {{oculi.amount}}</p>
-<p>Total amount : {{oculi.amount}}</p>
-<p>Description : {{oculi.description}}</p>
-{% endfor %}
+
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Region</th>
+        <th>Amount collected</th>
+        <th>Total amount</th>
+        <th>Description</th>
+    </tr>
+
+    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+
+    {% for oculi in oculus %}
+        <tr>
+            <td>{{oculi.name}}</td>
+            <td>{{oculi.region}}</td>
+            <td>{{oculi.amount_collected}}</td>
+            <td>{{oculi.amount}}</td>
+            <td>{{oculi.description}}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<br />
+
+<a href="{% url 'main:create_product' %}">
+    <button>
+        Add New Product
+    </button>
+</a>
+
+{% endblock content %}
