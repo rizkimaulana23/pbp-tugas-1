@@ -1,36 +1,74 @@
-{% extends 'base.html' %}
+{% extends  'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    {% block content %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
+    <script src="{% static 'js/bootstrap.bundle.js'%}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'main_app.css' %}"/>
+    
+    <div class="container mt-3">
+        <h1>Resource Tracker</h1>
+        <p> The thing is, Genshin Impact is my favourite game. Ever. There's sort of a wish in my bucket list. To make
+            make a project to dedicate my skill but with the theme of my this game. So, I hope this will be the one. </p>
+        <table class="table table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Region</th>
+                    <th>Amount collected</th>
+                    <th>Total amount</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for oculi in oculus %}
+                <tr>
+                    <td>{{oculi.name}}</td>
+                    <td>{{oculi.region}}</td>
+                    <td>{{oculi.amount_collected}}</td>
+                    <td>{{oculi.amount}}</td>
+                    <td>{{oculi.description}}</td>
+                    <td class="d-flex align-items-center">
+                        <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary mx-1">+</button>
+                        </form>
+                        <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary mx-1">-</button>
+                        </form>
+                        <form method="post" action="{% url 'main:remove_product' oculi.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-primary mx-1">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>  
+    </div>
 
-{% block content %}
-<h1>Oculus Tracker</h1>
+    <a href="{% url 'main:create_product' %}">
+        <button class="btn btn-primary">
+            Add New Resources
+        </button>
+    </a>
 
-<table>
-    <tr>
-        <th>Name</th>
-        <th>Region</th>
-        <th>Amount collected</th>
-        <th>Total amount</th>
-        <th>Description</th>
-    </tr>
+    <a href="{% url 'main:logout' %}">
+        <button class="btn btn-primary">
+            Logout
+        </button>
+    </a>
 
-    {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-
-    {% for oculi in oculus %}
-        <tr>
-            <td>{{oculi.name}}</td>
-            <td>{{oculi.region}}</td>
-            <td>{{oculi.amount_collected}}</td>
-            <td>{{oculi.amount}}</td>
-            <td>{{oculi.description}}</td>
-        </tr>
-    {% endfor %}
-</table>
-
-<br />
-
-<a href="{% url 'main:create_product' %}">
-    <button>
-        Add New Product
-    </button>
-</a>
-
-{% endblock content %}
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
+    
+    {% endblock %} 
+</body>
+</html>

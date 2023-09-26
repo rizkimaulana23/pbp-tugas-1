@@ -1,0 +1,13 @@
+[class*="col"] {
+    padding: 1rem;
+    background-color: #167dc7;
+    border: 1px solid #fff;
+    color:#fff;
+}
+
+.row{
+    color:green;
+}
+table.table.table-hover.table-bordered{
+    margin-top: 20px;
+}

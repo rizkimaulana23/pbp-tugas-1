@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,6 +27,14 @@ SECRET_KEY = 'django-insecure-44m&*w4p4+9$571^^9mwq1a$isg4d3%wogjd*^-4s*#@w+o9hi
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# Define the STATIC_URL to specify the URL for serving static files
+STATIC_URL = '/static/'
+
+# Define the STATICFILES_DIRS to specify where Django should look for static files
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 
 # Application definition
