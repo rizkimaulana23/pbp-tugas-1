@@ -342,6 +342,9 @@ Cookies adalah sejenis data yang disimpan oleh server web di komputer pengguna d
 Dalam konteks Django, cookies sering digunakan untuk mengelola data sesi pengguna. Sesuai dengan pendekatan stateless HTTP, di mana setiap permintaan dari browser dianggap independen, Django menggunakan cookies untuk mengidentifikasi dan melacak sesi pengguna.
 
 ##  Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+Penggunaan cookies dalam pengembangan web bisa dianggap aman secara default, tetapi ada beberapa risiko yang perlu diperhatikan. Cookies dapat digunakan untuk menyimpan informasi sensitif dan jika tidak diimplementasikan dengan baik, data pengguna bisa terancam keamanannya. Selain itu, serangan XSS dan CSRF dapat mengancam keamanan cookies jika tidak ada langkah-langkah keamanan yang cukup. Selain itu, cookies juga dapat digunakan untuk melacak pengguna tanpa izin mereka, yang dapat menimbulkan masalah privasi dan hukum.   
+
+Oleh karena itu, pengembang web harus mematuhi praktik terbaik keamanan, menggunakan HTTPS, mengatur flag HttpOnly, dan memberikan informasi yang jelas serta meminta persetujuan pengguna saat menggunakan cookies untuk melacak aktivitas mereka. Keamanan cookies sangat bergantung pada implementasi dan pengelolaannya, sehingga perhatian terus-menerus terhadap praktik terkini dalam pengembangan web yang aman sangat penting.
 
 ## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 ### Menambahkan Halaman Register
@@ -534,7 +537,62 @@ Dalam konteks Django, cookies sering digunakan untuk mengelola data sesi penggun
     ...
     ~~~
 ### Menggunakan Data dari Cookies
-- 
+- Mengimport `datetime` pada `views.py`
+    ~~~
+    import datetime
+    ~~~
+- Mengedit fungsi `login_user` pada `views.py`. Hal ini supaya kita dapat meilhat kapan terakhir kali pengguna melakukan login
+    ~~~
+    def login_user(request):
+        if request.method == 'POST':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                response = HttpResponseRedirect(reverse("main:show_main")) 
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+            else:
+                messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+        context = {}
+        return render(request, 'login.html', context)
+    ~~~
+
+- Membuat fungsi `show_main` pada `views.py` supaya dapat memproses `last_login` dengan menambahkannya pada context
+    ~~~
+    def show_main(request):
+
+        # Iterating through the data
+
+        oculi = Oculi.objects.filter(user=request.user)
+        if 'last_login' in request.COOKIES:
+            last_login = request.COOKIES['last_login']
+        else:
+            last_login = 'N/A'  # Set a default value or handle the case when the key doesn't exist
+        context = {
+            'name' : request.user.username,
+            'class' : "PBP-C",
+            'oculus' : oculi,
+            'last_login': last_login,
+        }
+
+        return render(request, "main.html", context)
+    ~~~
+- Membuat fungsi `logout_user` supaya menghapus cookie saat pengguna melakukan logout
+    ~~~
+    def logout_user(request):
+        logout(request)
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        return response
+    ~~~
+- Menambahkan potongan kode pada `main.html` agar menampilkan terakhir kali login
+    ~~~
+    ...
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
+    ...
+    ~~~
 
 
 ### Menghubungkan Model Oculi dengan User
@@ -561,3 +619,50 @@ Dalam konteks Django, cookies sering digunakan untuk mengelola data sesi penggun
     ~~~
 
 ### Mengimplementasikan bonus
+- Menambahkan row baru pada table produk pada `main.html`
+    ~~~
+    <td class="d-flex align-items-center">
+        <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
+            {% csrf_token %}
+            <button class="btn btn-primary mx-1">+</button>
+        </form>
+        <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
+            {% csrf_token %}
+            <button class="btn btn-primary mx-1">-</button>
+        </form>
+        <form method="post" action="{% url 'main:remove_product' oculi.id %}">
+            {% csrf_token %}
+            <button class="btn btn-primary mx-1">Delete</button>
+        </form>
+    </td>
+    ~~~
+- Menambahkan tiga fungsi baru pada `views.py` yang fungsinya adalah sesuai dengan namanya. ID didapatkan pada `main.html` saat melakukan iterasi untuk membuat table.
+    ~~~
+    def plus_product_amount(request, id):
+        product = Oculi.objects.get(id=id)
+        product.amount_collected += 1
+        product.save()
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        return response
+
+    def minus_product_amount(request, id):
+        product = Oculi.objects.get(id=id)
+        if (product.amount > 0):
+            product.amount_collected -= 1
+            product.save()
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        return response
+
+    def remove_product(request, id):
+        Oculi.objects.filter(pk=id).delete()
+        response = HttpResponseRedirect(reverse("main:show_main"))
+        return response
+    ~~~
+- Menambahkan ketiga fungsi tersebut pada `urls.py`
+    ~~~
+    ...
+    path('plus_product_amount/<int:id>', plus_product_amount, name='plus_product_amount'),
+    path('minus_product_amount/<int:id>', minus_product_amount, name='minus_product_amount'),
+    path('remove_product/<int:id>', remove_product, name='remove_product'),
+    ...
+    ~~~
