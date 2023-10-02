@@ -1,45 +1,80 @@
 {% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% block content %}
+    <style>
+        .container.text-center {
+            width: 50vw; /* Set the width to 50% of the viewport width */
+            margin: 0 auto; /* Center the container horizontally */
+            background-color: #9EB384; /* Add a background color for visualization */
+            padding: 100px; /* Add padding for spacing within the container */
+            border-radius: 10px;
+        }
+        .login-head {
+            color: white;
+            font-size: 40px;
+        }
+        .login {
+            vertical-align: top;
+        }
 
-{% block meta %}
-    <title>Login</title>
-{% endblock meta %}
+        .login-msg {
+            color: white;
+            font-size: 15px;
+        }
+    </style>
+    <div class = "login">
+        <div class = "container text-center">
+            <div class = "row">
+                <h1 class="login-head">Welcome to Rizmau's Website!</h1>
+                <h2 class="login-msg">Please input your information to get in.</h2>
+            </div>
+            <div class = "row justify-content-center align-items-center">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            vertical-align: middle;
+                        }
+                        
+                        th, td {
+                            text-align: center;
+                            vertical-align: middle;
+                            padding: 10px; /* Add padding to style cells */
+                        }
+                    </style>
+                    <table>
+                        <tr>
+                            <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                        </tr>
+                                
+                        <tr>
+                            <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+                        </tr>
 
-{% block content %}
-
-<div class = "login">
-
-    <h1>Login</h1>
-
-    <form method="POST" action="">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
-                    
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </form>
-
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
-        
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
-
-</div>
-
-{% endblock content %}
+                        <tr></tr>
+                            <td><input class="btn btn-primary login_btn" type="submit" value="Login" style = "background-color: #435334; border:transparent"></td>
+                        </tr>
+                    </table>
+                </form> 
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}     
+                    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+            </div>
+        </div>
+    </div>
+    {% endblock %} 
+</body>

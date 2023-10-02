@@ -58,7 +58,7 @@
                 {% endfor %}
             </tbody>  
     </div>
-
+    
     <a href="{% url 'main:create_product' %}">
         <button class="btn btn-primary">
             Add New Resources
@@ -74,5 +74,16 @@
     <h5>Sesi terakhir login: {{ last_login }}</h5>
     
     {% endblock %} 
+    <div class="container mt-3">
+        {% for oculi in oculus %}
+      <div class="card">
+        <h2>{{oculi.name}}</h2>
+        <p>Author: {{oculi.region}}</p>
+        <p>Amount collected: {{oculi.amount_collected}}</p>
+        <p>Total amount: {{oculi.amount}}</p>
+        <p>Description: {{oculi.description}}</p>
+      </div>
+    {% endfor %}
+    </div>
 </body>
 </html>

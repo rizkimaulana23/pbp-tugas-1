@@ -1,5 +1,4 @@
-{% extends  'base.html' %}
-{% load static %}
+{% extends 'base.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,65 +9,110 @@
 </head>
 <body>
     {% block content %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"/>
-    <script src="{% static 'js/bootstrap.bundle.js'%}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'main_app.css' %}"/>
-    
-    <div class="container mt-3">
+    <style>
+        .btn{
+            background-color: white; 
+            border:transparent;
+            color:#9EB384;
+        }
+        .btn.btn-main {
+            background-color: #9EB384; 
+            border:transparent;
+            color:white;
+        }
+        .centered-text{
+            text-align: center;
+        }
+        .card{
+            background-color: #9EB384;
+            border:transparent;
+        }
+        .card-header{
+            border:transparent;
+        }
+        .centered-cards{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card-body p{ 
+            color:#ffffff;
+        }
+        .container-card {
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 80px; /* Add padding for spacing within the container */
+            padding-top: 10px;
+            padding-bottom: 50px;
+            border-radius: 10px;
+            margin-bottom: 100px;
+        }
+        .card:last-child {
+            background-color:#e98e0e;
+        }
+        .card:last-child .card-header {
+            background-color:#de8407;
+        }
+        .card:last-child button{
+            color:#de8407;
+        }
+    </style>
+    <div class="container">
         <h1>Resource Tracker</h1>
         <p> The thing is, Genshin Impact is my favourite game. Ever. There's sort of a wish in my bucket list. To make
-            make a project to dedicate my skill but with the theme of my this game. So, I hope this will be the one. </p>
-        <table class="table table-hover table-bordered">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Region</th>
-                    <th>Amount collected</th>
-                    <th>Total amount</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for oculi in oculus %}
-                <tr>
-                    <td>{{oculi.name}}</td>
-                    <td>{{oculi.region}}</td>
-                    <td>{{oculi.amount_collected}}</td>
-                    <td>{{oculi.amount}}</td>
-                    <td>{{oculi.description}}</td>
-                    <td class="d-flex align-items-center">
-                        <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-primary mx-1">+</button>
-                        </form>
-                        <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-primary mx-1">-</button>
-                        </form>
-                        <form method="post" action="{% url 'main:remove_product' oculi.id %}">
-                            {% csrf_token %}
-                            <button class="btn btn-primary mx-1">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>  
-    </div>
-
-    <a href="{% url 'main:create_product' %}">
-        <button class="btn btn-primary">
-            Add New Resources
-        </button>
-    </a>
-
-    <a href="{% url 'main:logout' %}">
-        <button class="btn btn-primary">
-            Logout
-        </button>
-    </a>
-
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
+            make a project to dedicate my skill but with the theme of my this game. So, I hope this will be the one. </p> 
+        <a href="{% url 'main:create_product' %}">
+            <button class="btn btn-main btn-primary">
+                Add New Resources
+            </button>
+        </a>
     
+        <a href="{% url 'main:logout' %}">
+            <button class="btn btn-main btn-primary">
+                Logout
+            </button>
+        </a>
+        <h5>Sesi terakhir login: {{ last_login }}</h5>
+    </div>
+    
+    <div class="container-card mx-auto" style="margin-top:50px;">
+        <div class="row row-cols-1 g-4">
+            {% for oculi in oculus %}
+            <div class="card mb-3" style="max-width: 18rem; margin:10px">
+                <div class="card-header" style="margin-top: 10px;">
+                    <h2 style="color:white">{{oculi.name}}</h2> 
+                </div>
+                <div class="card-body">
+                    <p>Region: {{oculi.region}}</p>
+                    <p>Amount collected: {{oculi.amount_collected}}</p>
+                    <p>Total amount: {{oculi.amount}}</p>
+                    <p>Description: {{oculi.description}}</p>
+                    <div class="row">
+                        <div class="col">
+                            <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1"  >+</button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1">-</button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form method="post" action="{% url 'main:remove_product' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+    </div>
     {% endblock %} 
 </body>
 </html>

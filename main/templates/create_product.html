@@ -1,19 +1,37 @@
 {% extends 'base.html' %} 
 
 {% block content %}
-<h1>Add New Product</h1>
-
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
+<style>
+    .container-form {
+        width: 50vw; /* Set the width to 50% of the viewport width */
+        margin: 0 auto; /* Center the container horizontally */
+        background-color: #9EB384; /* Add a background color for visualization */
+        padding: 80px; /* Add padding for spacing within the container */
+        padding-top: 30px;
+        padding-bottom: 50px;
+        border-radius: 10px;
+        margin-bottom: 100px;
+    }
+    .heading-new {
+        color: white;
+        font-size: 40px;
+        margin-bottom: 15px;
+    }
+</style>
+<div class="container-form">
+    <h1 class="heading-new">Add New Product</h1>
+    <form method="POST" class="my-form">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+            <tr>
+                <td></td>
+                <td>
+                    <input type="submit" value="Add Product"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
 
 {% endblock %}

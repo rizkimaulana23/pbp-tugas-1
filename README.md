@@ -666,3 +666,223 @@ Oleh karena itu, pengembang web harus mematuhi praktik terbaik keamanan, menggun
     path('remove_product/<int:id>', remove_product, name='remove_product'),
     ...
     ~~~
+
+# Tugas 5
+##  Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+Element selector digunakan pada CSS untuk mengganti elemen-elemen yang ada pada berkas html tersebut. Element selector tersebut bermanfaat untuk memilih element apa yang ingin kita ganti. Ada berbagai jenis element selector dan setiap element selector tersebut memiliki manfaatnya masing-masing.  
+- Element selector  
+    Akan mengaplikasikan pada sesuai dengan elemen pada berkas html tersebut. Elemen berada pada start tag dan end tag sebuah bagian html. Bermanfaat apabila kita ingin mengganti atribut semua elemen tertentu pada berkas html tersebut.
+- ID selector   
+    ID pada css bersifat unique. Yang berarti hanya satu element pada HTML yang memiliki ID tersebut. Kita dapat menggunakan ID selector apabila ingin mengganti sebuah element yang memiliki ID tersebut saja.
+- Class selector  
+    Class cukup mirip dengan element apalagi jika menggunakan bootstrap. Namun, Class bisa diaplikasikan pada element yang berbeda. Jadi, element yang berbeda bisa memiliki Class yang sama. Maka dari itu, Class Selector bisa dimanfaatkan apabila ingin mengganti style dari suatu bagian program yang sama atau memiliki fungsi yang sama.
+- Universal selector  
+    Selector ini akan mengubah style dari seluruh element yang ada di HTML. Selector ini bagus untuk mengubah style seluruh element pada HTML.
+##  Jelaskan HTML5 Tag yang kamu ketahui.
+Daftar Tag HTML5 dapat dilihat pada documentasi HTMLnya. Namun, berikut tag yang menurut saya harus diketahui dan cukup sering digunakan pada pembuatan web.  
+- `<a>` : Mendefinisikan hyperlink
+- `<div>` : Mendefinisikan container umum yang akan digunakan untuk mengelompokkan dan membuat struktur dari konten yang dibuat
+- `<p>` : Mendefinisikan paragraf teks
+- `<img>` : Menampilkan gambar 
+- `<h1>, <h2>, <h3>, <h4>, <h5>, <h6>` : Heading yang dapat digunakan sebagai judul atau subjudul
+- `<table>` : Membuat table untuk mengorganisir data
+- `<tr>, <th>, <td>` : Digunakan di dalam table untuk mendefinisikan rows, header, dan data
+##  Jelaskan perbedaan antara margin dan padding.
+Secara letak relatif terhadap border, margin terletak lebih luar dari border dan padding terletak lebih dalam dari border. Border membatasi margin dan padding.   
+Margin menentukan jarak-jarak dengan elemen di luarnya sedangkan padding menentukan jarak antara konten elemen dengan border. Margin tidak mempunyai latar belakang atau warna, sedangkan padding berpengaruh terhadap warna dan latar belakang elemen tersebut.  
+
+##  Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya?
+
+1. **Filosofi Desain:**
+   - **Bootstrap:** Bootstrap adalah sebuah framework yang sudah memiliki desain UI yang siap pakai. Ini berarti Anda akan mendapatkan komponen, ikon, dan tata letak yang telah dirancang secara estetis, sehingga Anda dapat membangun situs web dengan cepat tanpa harus merancang ulang tampilannya.
+   - **Tailwind CSS:** Tailwind CSS adalah framework utility-first yang memberikan sejumlah besar kelas CSS yang dapat digunakan untuk merancang tampilan Anda secara lebih fleksibel. Anda perlu merancang tampilan Anda dari awal menggunakan kelas-kelas ini, yang memberikan lebih banyak kreativitas dan fleksibilitas.
+
+2. **Ukuran File:**
+   - **Bootstrap:** Karena Bootstrap sudah menyediakan banyak komponen dan desain, file CSS dan JavaScript-nya bisa menjadi cukup besar jika Anda tidak memangkasnya dengan hati-hati. Ini dapat memengaruhi kinerja situs web Anda, terutama pada perangkat mobile.
+   - **Tailwind CSS:** Tailwind CSS biasanya menghasilkan file CSS yang lebih kecil karena hanya menghasilkan kelas yang Anda gunakan. Ini dapat mengurangi ukuran file dan mempercepat waktu pemuatan situs Anda.
+
+3. **Kustomisasi:**
+   - **Bootstrap:** Bootstrap menyediakan sejumlah opsi kustomisasi, tetapi dalam banyak kasus, Anda mungkin perlu menambahkan CSS tambahan atau memanipulasi gaya bawaan Bootstrap untuk mencapai tampilan yang Anda inginkan.
+   - **Tailwind CSS:** Tailwind CSS dirancang untuk kustomisasi yang ekstensif. Anda dapat dengan mudah menyesuaikan tampilan Anda dengan menambahkan atau mengubah kelas CSS sesuai kebutuhan Anda.
+
+4. **Kemudahan Penggunaan:**
+   - **Bootstrap:** Bootstrap memiliki komponen dan tata letak yang sudah jadi, sehingga cocok untuk proyek yang membutuhkan pengembangan cepat tanpa banyak kustomisasi. Ini sangat berguna jika Anda ingin membangun prototipe dengan cepat.
+   - **Tailwind CSS:** Tailwind lebih cocok untuk proyek-proyek di mana Anda ingin merancang tampilan dengan sangat detail atau memiliki kebutuhan desain yang unik. Ini memerlukan lebih banyak penulisan kode tetapi memberikan kendali yang lebih besar.
+
+5. **Komunitas dan Ekosistem:**
+   - **Bootstrap:** Bootstrap adalah salah satu framework CSS yang paling populer, sehingga memiliki komunitas yang besar, banyak dokumentasi, dan sumber daya online yang tersedia.
+   - **Tailwind CSS:** Tailwind juga memiliki komunitas yang berkembang pesat dan banyak sumber daya yang tersedia, tetapi mungkin tidak sebesar Bootstrap.
+
+## Cara Implementasi dan Pengerjaan Tugas Ini
+Pada tugas ini diberikan perintah untuk menghias tampilan dari website dengan CSS dan Bootstrap. Berikut langkah-langkah yang saya lakukan untuk mengerjakan tugas ini.
+### Menambahkan navigation bar pada semua halaman website
+Saya mengedit `base.html` dan menambahkan navigation bar dengan CSS supaya semua halaman website memiliki navigation bar.
+~~~
+<nav class="navbar navbar-expand-lg border-bottom border-body" data-bs-theme="dark" style="background-color: #435334;">
+    <div class="container">
+        <a class="navbar-brand" href="#">Logo nanti aja dah</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/about/">About</a>
+                </li>
+                <!-- Add more menu items as needed -->
+            </ul>
+        </div>
+    </div>
+</nav>
+~~~
+### Mengubah tampilan pada halaman utama
+- Mengubah tampilan tabel menjadi card  
+    Saya membuat container baru untuk card. Setelah itu saya mengiterasikan sebanyak objek yang ada pada database. Setiap card memiliki elemen teks dan 3 button yang masing-masing memiliki fungsi yang berbeda.
+    ~~~
+    <div class="container-card mx-auto" style="margin-top:50px;">
+        <div class="row row-cols-1 g-4">
+            {% for oculi in oculus %}
+            <div class="card mb-3" style="max-width: 18rem; margin:10px">
+                <div class="card-header" style="margin-top: 10px;">
+                    <h2 style="color:white">{{oculi.name}}</h2> 
+                </div>
+                <div class="card-body">
+                    <p>Region: {{oculi.region}}</p>
+                    <p>Amount collected: {{oculi.amount_collected}}</p>
+                    <p>Total amount: {{oculi.amount}}</p>
+                    <p>Description: {{oculi.description}}</p>
+                    <div class="row">
+                        <div class="col">
+                            <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1"  >+</button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1">-</button>
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form method="post" action="{% url 'main:remove_product' oculi.id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-primary mx-1">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    ~~~
+- Mengganti style dari elemen yang ditambahkan (IMPLEMENTASI BONUS)  
+    Styling saya lakukan secara Internal untuk memudahkan pengerjaannya (tidak punya dua monitor moment). Pada code di bawah pada class selector `.card:last-child`. Saya mengganti style baris terakhir card saya dengan menambahkan `:last-child` pada class selector tersebut.
+    ![](images_readme/halaman_utama.png)
+    ~~~
+    <style>
+        .btn{
+            background-color: white; 
+            border:transparent;
+            color:#9EB384;
+        }
+        .btn.btn-main {
+            background-color: #9EB384; 
+            border:transparent;
+            color:white;
+        }
+        .centered-text{
+            text-align: center;
+        }
+        .card{
+            background-color: #9EB384;
+            border:transparent;
+        }
+        .card-header{
+            border:transparent;
+        }
+        .centered-cards{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .card-body p{ 
+            color:#ffffff;
+        }
+        .container-card {
+            margin: 0 auto; /* Center the container horizontally */
+            padding: 80px; /* Add padding for spacing within the container */
+            padding-top: 10px;
+            padding-bottom: 50px;
+            border-radius: 10px;
+            margin-bottom: 100px;
+        }
+        .card:last-child {
+            background-color:#e98e0e;
+        }
+        .card:last-child .card-header {
+            background-color:#de8407;
+        }
+        .card:last-child button{
+            color:#de8407;
+        }
+    </style>
+    ~~~
+- Mengubah tampilan halaman login  
+    Saya mengubah tampilan halaman login dengan membuat container baru untuk elemen-elemen yang diperlukan untuk form login.
+    ![](images_readme/halaman_login.png)
+    ~~~
+    <div class = "login">
+        <div class = "container text-center">
+            <div class = "row">
+                <h1 class="login-head">Welcome to Rizmau's Website!</h1>
+                <h2 class="login-msg">Please input your information to get in.</h2>
+            </div>
+            <div class = "row justify-content-center align-items-center">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            vertical-align: middle;
+                        }
+                        
+                        th, td {
+                            text-align: center;
+                            vertical-align: middle;
+                            padding: 10px; /* Add padding to style cells */
+                        }
+                    </style>
+                    <table>
+                        <tr>
+                            <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+                        </tr>
+                                
+                        <tr>
+                            <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+                        </tr>
+
+                        <tr></tr>
+                            <td><input class="btn btn-primary login_btn" type="submit" value="Login" style = "background-color: #435334; border:transparent"></td>
+                        </tr>
+                    </table>
+                </form> 
+                    {% if messages %}
+                        <ul>
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}     
+                    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+            </div>
+        </div>
+    </div>
+    ~~~
