@@ -37,7 +37,6 @@ STATIC_URL = '/static/'
 
 # Define the STATICFILES_DIRS to specify where Django should look for static files
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
 ]
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
