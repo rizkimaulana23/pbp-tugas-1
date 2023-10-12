@@ -9,3 +9,7 @@ class Oculi(models.Model):
     amount_collected = models.IntegerField()
     amount = models.IntegerField()
     description = models.TextField()
+
+class Employee(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    department = models.CharField(max_length=255)

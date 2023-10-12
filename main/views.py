@@ -3,7 +3,7 @@ from .models import Oculi
 from django.http import HttpResponseRedirect
 from main.forms import ProductForm
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core import serializers
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -12,6 +12,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 import datetime
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
         
 # Create your views here.
 @login_required(login_url='/login')
@@ -44,6 +46,21 @@ def create_product(request):
 
     context = {'form': form}
     return render(request, "create_product.html", context)
+
+def edit_product(request, id):
+    # Get product berdasarkan ID
+    product = Oculi.objects.get(pk = id)
+
+    # Set product sebagai instance dari form
+    form = ProductForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
 
 def show_xml(request):
     data = Oculi.objects.all()
@@ -113,3 +130,48 @@ def remove_product(request, id):
     Oculi.objects.filter(pk=id).delete()
     response = HttpResponseRedirect(reverse("main:show_main"))
     return response
+
+def get_product_json(request):
+    product_item = Oculi.objects.all()
+    return HttpResponse(serializers.serialize('json', product_item))
+
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+
+        user = request.user
+        name = request.POST.get("name")
+        region = request.POST.get("region")
+        amount = request.POST.get("amount")
+        amount_collected = request.POST.get("amount_collected")
+        description = request.POST.get("description")
+
+        new_product = Oculi(name=name, region=region, amount=amount, amount_collected=amount_collected, description=description, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def plus_product_amount_ajax(request, id):
+    product = Oculi.objects.get(pk=id)
+    product.amount_collected += 1
+    product.save()
+    return HttpResponse(b"ADD", status=201)
+
+@csrf_exempt
+def minus_product_amount_ajax(request, id):
+    product = Oculi.objects.get(pk=id)
+    if (product.amount > 0):
+        product.amount_collected -= 1
+        product.save()
+        return HttpResponse(b"CREATED", status=201)
+    else :
+        return HttpResponse(b"NOT CREATED", status=201)
+
+    
+@csrf_exempt
+def remove_product_ajax(request, id):
+    Oculi.objects.filter(pk=id).delete()
+    return HttpResponseRedirect(reverse("main:show_main"))

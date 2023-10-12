@@ -7,8 +7,8 @@
     <title>Document</title>
     
 </head>
+{% block content %}
 <body>
-    {% block content %}
     <style>
         .btn{
             background-color: white; 
@@ -57,6 +57,7 @@
             color:#de8407;
         }
     </style>
+    
     <div class="container">
         <h1>Resource Tracker</h1>
         <p> The thing is, Genshin Impact is my favourite game. Ever. There's sort of a wish in my bucket list. To make
@@ -72,47 +73,141 @@
                 Logout
             </button>
         </a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Product by AJAX</button>
+
         <h5>Sesi terakhir login: {{ last_login }}</h5>
     </div>
     
-    <div class="container-card mx-auto" style="margin-top:50px;">
-        <div class="row row-cols-1 g-4">
-            {% for oculi in oculus %}
-            <div class="card mb-3" style="max-width: 18rem; margin:10px">
-                <div class="card-header" style="margin-top: 10px;">
-                    <h2 style="color:white">{{oculi.name}}</h2> 
+    <table id="product_table"></table>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="card-body">
-                    <p>Region: {{oculi.region}}</p>
-                    <p>Amount collected: {{oculi.amount_collected}}</p>
-                    <p>Total amount: {{oculi.amount}}</p>
-                    <p>Description: {{oculi.description}}</p>
-                    <div class="row">
-                        <div class="col">
-                            <form method="post" action="{% url 'main:plus_product_amount' oculi.id %}">
-                                {% csrf_token %}
-                                <button class="btn btn-primary mx-1"  >+</button>
-                            </form>
+                <div class="modal-body">
+                    <form id="form" onsubmit="return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name"></input>
                         </div>
-                        <div class="col">
-                            <form method="post" action="{% url 'main:minus_product_amount' oculi.id %}">
-                                {% csrf_token %}
-                                <button class="btn btn-primary mx-1">-</button>
-                            </form>
+                        <div class="mb-3">
+                            <label for="region" class="col-form-label">Region:</label>
+                            <input type="text" class="form-control" id="region" name="region"></input>
                         </div>
-                        <div class="col">
-                            <form method="post" action="{% url 'main:remove_product' oculi.id %}">
-                                {% csrf_token %}
-                                <button class="btn btn-primary mx-1">Delete</button>
-                            </form>
+                        <div class="mb-3">
+                            <label for="amount" class="col-form-label">Amount:</label>
+                            <input type="number" class="form-control" id="amount" name="amount"></input>
                         </div>
-                    </div>
-                    
+                        <div class="mb-3">
+                            <label for="amount_collected" class="col-form-label">Amount Collected:</label>
+                            <input type="number" class="form-control" id="amount_collected" name="amount_collected"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </form>
                 </div>
-              </div>
-            {% endfor %}
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+                </div>
+            </div>
         </div>
     </div>
-    {% endblock %} 
+    
+    <div id="card-container" class="row row-cols-1 g-4">
+    </div>
 </body>
+
+<script>
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+
+    async function refreshProducts() {
+        document.getElementById("card-container").innerHTML = ""
+        const products = await getProducts()
+
+        let htmlString = ``
+
+        products.forEach((item) => {
+            htmlString += `\n
+            <div class="card mb-3" style="max-width: 18rem; margin:10px">
+                <div class="card-header" style="margin-top: 10px;">
+                    <h2 style="color:white">${item.fields.name}</h2> 
+                </div>
+                <div class="card-body">
+                    <p>Region: ${item.fields.region}</p>
+                    <p>Amount collected: ${item.fields.amount_collected}</p>
+                    <p>Total amount: ${item.fields.amount}</p>
+                    <p>Description: ${item.fields.description}</p>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-primary" onclick="plus_product_ajax(${item.pk})">+</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" onclick="minus_product_ajax(${item.pk})">-</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" onclick="delete_product_ajax(${item.pk})">Delete</button>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center m" style="margin-top:10px;">
+                        <div class="col">
+                            <a href="edit_product/${item.pk}">
+                                <button class="btn btn-primary btn-block" style="width:100%">
+                                    Edit
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ` 
+        })
+        
+        document.getElementById("card-container").innerHTML = htmlString
+    }
+
+    refreshProducts()
+
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        
+        return false
+    }
+
+    function plus_product_ajax(ID) {
+        fetch('/plus_product_amount_ajax/0/'.replace("0", ID), {
+            method: 'POST',
+        }).then(refreshProducts)
+
+        return false
+    }
+
+    function minus_product_ajax(ID) {
+        fetch('/minus_product_amount_ajax/0/'.replace("0", ID), {
+            method: 'POST',
+        }).then(refreshProducts)
+
+        return false
+    }
+
+    function delete_product_ajax(ID) {
+        fetch('/remove_product_ajax/0/'.replace("0", ID), {
+            method: 'DELETE',
+        }).then(refreshProducts)
+    }
+    document.getElementById("button_add").onclick = addProduct
+</script>
+{% endblock %} 
 </html>

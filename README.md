@@ -886,3 +886,181 @@ Saya mengedit `base.html` dan menambahkan navigation bar dengan CSS supaya semua
         </div>
     </div>
     ~~~
+
+# Tugas 6
+## Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.
+Asynchronous programming dan synchronous programming adalah dua pendekatan yang berbeda dalam pemrograman berbasis platform, terutama dalam konteks pemrograman yang melibatkan operasi I/O (Input/Output) atau komunikasi jarak jauh. Berikut adalah perbedaan utama antara keduanya:
+
+Synchronous Programming (Program Sinkron):
+- Dalam pemrograman sinkron, tugas atau operasi dieksekusi satu per satu secara berurutan. Ini berarti bahwa ketika suatu tugas atau operasi dimulai, program akan menunggu hingga tugas tersebut selesai sebelum melanjutkan ke tugas berikutnya. Ini adalah pendekatan yang sederhana untuk pemrograman, dan banyak bahasa pemrograman menggunakan model ini secara default.
+Keuntungannya adalah mudah dipahami dan diimplementasikan.
+Asynchronous Programming (Program Asinkron):
+- Dalam pemrograman asinkron, tugas atau operasi yang memerlukan waktu lama untuk menyelesaikan, seperti pembacaan berkas, kueri jaringan, atau interaksi dengan database, tidak akan menghentikan eksekusi program. Sebaliknya, program akan melanjutkan menjalankan tugas lain tanpa menunggu tugas tersebut selesai. Ini memungkinkan program untuk tetap responsif dan efisien, terutama dalam situasi di mana ada banyak tugas yang perlu dilakukan secara bersamaan.
+Biasanya, dalam pemrograman asinkron, digunakan konsep seperti callback, Promise, atau async/await untuk mengatur dan mengkoordinasikan tugas-tugas asinkron.
+
+Perbandingan:
+- Pemrograman sinkron cenderung lebih mudah dimengerti dan digunakan saat tugas-tugasnya sederhana dan tidak memerlukan kinerja tinggi.
+- Pemrograman asinkron lebih cocok untuk situasi di mana ada banyak tugas yang perlu dijalankan secara bersamaan atau tugas yang memerlukan waktu lama untuk menyelesaikan (seperti I/O atau komunikasi jarak jauh).
+- Pemrograman asinkron dapat menghasilkan aplikasi yang lebih responsif dan efisien, tetapi juga dapat menjadi lebih rumit untuk diimplementasikan dan di-debug.
+
+## Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.
+Dalam paradigma ini, JavaScript terutama digunakan untuk menangani peristiwa atau kejadian yang terjadi di halaman web. Peristiwa ini bisa berupa klik tombol, pengisian formulir, atau bahkan tanggapan dari server setelah permintaan AJAX.  
+  
+Ketika peristiwa terjadi, JavaScript akan menjalankan fungsi yang telah ditentukan sebelumnya, yang disebut "event handler" atau "listener". Fungsi ini merespons peristiwa tersebut dengan menjalankan tindakan tertentu.  
+  
+Pada tugas ini, terdapat tombol '+' untuk menambahkan jumlah dari properti "Amount" object. Saat object tersebut ditekan, akan ada event listener yang menerima info bahwa tombol sudah ditekan. Setelah itu, akan menjalankan sebuah fungsi yang ada pada script template html tersebut. Fungsi tersebut akan mengakses fungsi lainnya yang ada di `views.py` dan melakukan instruksi untuk menambahkan jumlah `amount` pada object tersebut yang terpilih.
+
+## Jelaskan penerapan asynchronous programming pada AJAX.
+Asynchronous programming dalam konteks AJAX (Asynchronous JavaScript and XML) adalah pendekatan yang memungkinkan Anda untuk melakukan operasi jaringan atau permintaan HTTP tanpa menghentikan eksekusi program utama. Kode yang dituliskan secara asynchronous akan dieksekusi di belakang thread utama atau biasa disebut main thread. Hal tersebut tidak akan membloking proses runtime atau menunggu hingga proses selesai dilakukan. Sembari menunggu proses tersebut selesai, compiler akan mengeksekusi perintah kode selanjutnya.
+
+## Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.
+1. Fetch API:
+
+Native to Modern Browsers: Fetch API adalah bagian dari standar JavaScript yang tersedia di semua modern browser. Ini berarti Anda tidak perlu mengunduh atau mengimpor library tambahan untuk menggunakannya.
+
+Promise-Based: Fetch API menggunakan Promise untuk mengelola permintaan dan respons. Ini membuatnya lebih modern dan mudah dipahami daripada callback hell yang mungkin muncul dalam penggunaan AJAX konvensional.
+
+Ringan dan Efisien: Karena Fetch API adalah bagian dari JavaScript, tidak ada tambahan beban berat seperti jQuery yang perlu diunduh dan dimuat ke dalam proyek Anda. Ini membuat halaman web menjadi lebih ringan.
+
+Modular: Anda dapat dengan mudah mengkustomisasi atau membangun abstraksi tambahan di atas Fetch API sesuai kebutuhan proyek Anda.
+
+2. jQuery:
+
+Cross-Browser Compatibility: jQuery telah dirancang untuk menangani perbedaan dalam dukungan browser, sehingga dapat memberikan konsistensi dalam pengembangan di berbagai browser.
+
+Sintaksis yang Lebih Pendek: jQuery memiliki sintaksis yang lebih ringkas dan sederhana daripada Fetch API, yang memungkinkan Anda untuk menulis kode dengan lebih sedikit baris.
+
+Plugin Ekosistem: jQuery memiliki ekosistem plugin yang luas yang dapat mempercepat pengembangan web dengan menambahkan fungsionalitas tambahan seperti animasi, validasi, manipulasi DOM, dan lainnya.
+
+Pendapat:
+Pilihan antara Fetch API dan jQuery tergantung pada situasi spesifik Anda:
+
+Fetch API adalah pilihan yang baik jika Anda mengutamakan:
+
+Kode yang lebih modern dan bersih dengan penggunaan Promise.
+Kinerja yang lebih baik karena lebih ringan.
+Tidak perlu kompatibilitas dengan browser lama.
+Kemampuan untuk membangun abstraksi kustom sesuai kebutuhan Anda.
+jQuery masih dapat menjadi pilihan yang baik jika Anda mengutamakan:
+
+Kemudahan penggunaan dengan sintaksis yang lebih pendek.
+Kompatibilitas lintas browser yang sangat baik.
+Penggunaan plugin yang dapat mempercepat pengembangan aplikasi.
+## Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+### Membuat container sebagai tempat untuk card tersebut
+    ~~~
+    <div id="card-container" class="row row-cols-1 g-4">
+        </div>
+    ~~~
+### Membuat fungsi baru pada `views.py` untuk mendapatkan Object dalam bentuk json
+    Fungsi tersebut akan digunakan untuk memberikan data pada `main.html` nanti
+    ~~~
+    def get_product_json(request):
+        product_item = Oculi.objects.all()
+        return HttpResponse(serializers.serialize('json', product_item))
+    ~~~
+### Membuat fungsi JScript untuk mendapatkan product
+    ~~~
+    async function getProducts() {
+            return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+        }
+    ~~~
+### Membuat fungsi untuk menampilkan semua product pada container nanti
+    ~~~
+    async function refreshProducts() {
+        document.getElementById("card-container").innerHTML = ""
+        const products = await getProducts()
+        let htmlString = ``
+        products.forEach((item) => {
+            htmlString += `\n
+            <div class="card mb-3" style="max-width: 18rem; margin:10px">
+                <div class="card-header" style="margin-top: 10px;">
+                    <h2 style="color:white">${item.fields.name}</h2> 
+                </div>
+                <div class="card-body">
+                    <p>Region: ${item.fields.region}</p>
+                    <p>Amount collected: ${item.fields.amount_collected}</p>
+                    <p>Total amount: ${item.fields.amount}</p>
+                    <p>Description: ${item.fields.description}</p>
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-primary mx-1" onclick="plus_product_ajax(${item.pk})">+</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary mx-1" onclick="minus_product_ajax(${item.pk})">-</button>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary mx-1" onclick="delete_product_ajax(${item.pk})">Delete</button>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            ` 
+        })
+    }
+    ~~~
+### Membuat modal sebagai tempat untuk menambahkan objek baru
+    ~~~
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" onsubmit="return false;">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="name" class="col-form-label">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="region" class="col-form-label">Region:</label>
+                            <input type="text" class="form-control" id="region" name="region"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="col-form-label">Amount:</label>
+                            <input type="number" class="form-control" id="amount" name="amount"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount_collected" class="col-form-label">Amount Collected:</label>
+                            <input type="number" class="form-control" id="amount_collected" name="amount_collected"></input>
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="col-form-label">Description:</label>
+                            <textarea class="form-control" id="description" name="description"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    ~~~
+### Membuat button untuk menunjukkan modal tersebut
+    ~~~
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Product by AJAX</button>
+    ~~~
+### Membuat fungsi untuk menambahkan object saat button add product di dalam modal tersebut ditekan
+    ~~~
+    function addProduct() {
+        fetch("{% url 'main:add_product_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshProducts)
+
+        document.getElementById("form").reset()
+        
+        return false
+    }
+    ~~~
+### Membuat event listener supaya saat tombol ditekan, hal tersebut akan terdeteksi
+    ~~~
+    document.getElementById("button_add").onclick = addProduct
+    ~~~
+
