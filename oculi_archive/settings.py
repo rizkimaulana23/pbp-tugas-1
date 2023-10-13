@@ -30,7 +30,7 @@ PRODUCTION = env.bool('PRODUCTION', False)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Define the STATIC_URL to specify the URL for serving static files
 STATIC_URL = '/static/'
