@@ -14,7 +14,30 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+import json
+
+
+@csrf_exempt
+def create_product_flutter(request):
+    if request.method == 'POST':
         
+        data = json.loads(request.body)
+
+        new_product = Oculi.objects.create(
+            user = request.user,
+            name = data["name"],
+            region = data["region"],
+            amount = int(data["amount"]),
+            amount_collected = int(data["amount_collected"]),
+            description = data["description"]
+        )
+
+        new_product.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
 # Create your views here.
 @login_required(login_url='/login')
 def show_main(request):
@@ -78,6 +101,7 @@ def show_json_by_id(request, id):
     data = Oculi.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
+@csrf_exempt
 def register(request):
     form = UserCreationForm()
 

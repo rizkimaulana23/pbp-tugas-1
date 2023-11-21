@@ -5,6 +5,7 @@ from main.views import plus_product_amount, minus_product_amount, remove_product
 from main.views import edit_product
 from main.views import get_product_json, add_product_ajax
 from main.views import plus_product_amount_ajax, remove_product_ajax, minus_product_amount_ajax
+from main.views import create_product_flutter
 
 
 app_name = 'main'
@@ -28,4 +29,5 @@ urlpatterns = [
     path('minus_product_amount_ajax/<int:id>/', minus_product_amount_ajax, name='minus_product_amount_ajax'),
     path('remove_product_ajax/<int:id>/', remove_product_ajax, name='remove_product_ajax'),
     path('edit_product/<int:id>', edit_product, name='edit_product'),
+    path('create-flutter/', create_product_flutter, name='create_product_flutter'),
 ]
