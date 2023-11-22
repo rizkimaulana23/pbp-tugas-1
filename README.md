@@ -1061,6 +1061,6 @@ Penggunaan plugin yang dapat mempercepat pengembangan aplikasi.
     ~~~
 ### Membuat event listener supaya saat tombol ditekan, hal tersebut akan terdeteksi
     ~~~
-    document.getElementById("button_add").onclick = addProduct
+    document.getElementById("button_add").onclick = addProduct 
     ~~~
 
