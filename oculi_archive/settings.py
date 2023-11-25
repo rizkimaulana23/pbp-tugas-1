@@ -77,6 +77,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'oculi_archive.urls'
 
+CSRF_TRUSTED_ORIGINS = ['https://front.bluemix.net']
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
